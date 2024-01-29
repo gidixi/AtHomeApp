@@ -34,7 +34,17 @@
            android:id="@+id/btn_stop_service"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:layout_margin="10dp"
            android:text="Stop Service" />
+
+       <TextView
+           android:id="@+id/tv_last_location"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_margin="10dp"
+           android:text="Ultima Posizione: nessuna"
+           android:layout_marginTop="16dp"/>
+
 
 
 

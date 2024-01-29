@@ -27,26 +27,32 @@ public class LocationService extends Service {
         @Override
         public void run() {
             if (locationTracker.isLocationAvailable()) {
-                Location location = locationTracker.getLocation();
-                if (location != null) {
-                    databaseHelper.saveLocation(location.getLatitude(), location.getLongitude());
-                    currentAttempt = 0; // Resetta il contatore dopo un salvataggio riuscito
-                    handler.postDelayed(this, 600000); // 10 minuti in millisecondi
+                Location currentLocation = locationTracker.getLocation();
+                if (currentLocation != null) {
+                    Location lastLocation = databaseHelper.getLastLocation();
+
+                    if (lastLocation == null || currentLocation.distanceTo(lastLocation) > 50) {
+                        databaseHelper.saveLocation(currentLocation.getLatitude(), currentLocation.getLongitude());
+                        handler.postDelayed(this, 900000); // 15 minuti in millisecondi
+                    } else {
+                        handler.postDelayed(this, 300000); // 5 minuti in millisecondi
+                    }
+                    currentAttempt = 0; // Resetta il contatore
                 } else {
                     if (currentAttempt < maxAttempts) {
                         currentAttempt++;
-                        handler.postDelayed(this, 3000); // Riprova dopo 3 secondi
+                        handler.postDelayed(this, 1000); // Riprova dopo 1 secondo
                     } else {
-                        currentAttempt = 0; // Resetta il contatore dopo il raggiungimento del massimo numero di tentativi
-                        handler.postDelayed(this, 600000); // Aspetta il prossimo intervallo regolare
+                        currentAttempt = 0; // Resetta il contatore
+                        handler.postDelayed(this, 300000); // 5 minuti in millisecondi
                     }
                 }
             } else {
-                // Se la posizione non è disponibile, aspetta il prossimo intervallo regolare
-                handler.postDelayed(this, 600000);
+                handler.postDelayed(this, 300000); // 5 minuti in millisecondi
             }
         }
     };
+
 
 
     @Override

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.Manifest;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         locationTracker = new LocationTracker(this);
         requestLocationPermission(); // Chiamata alla funzione per richiedere i permessi
 
-
+        showLastLocation();
 
         final Button btnGetLocation = findViewById(R.id.btn_getGps);
         btnGetLocation.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +82,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void showLastLocation() {
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        Location lastLocation = databaseHelper.getLastLocation();
+
+        TextView tvLastLocation = findViewById(R.id.tv_last_location);
+        if (lastLocation != null) {
+            String text = "Ultima Posizione:\nLatitudine: " + lastLocation.getLatitude() +
+                    "\nLongitudine: " + lastLocation.getLongitude();
+                    tvLastLocation.setText(text);
+        } else {
+            tvLastLocation.setText("Ultima Posizione: nessuna");
+        }
+    }
+
 
     private void checkLocationUpdates() {
         // Crea un nuovo Handler

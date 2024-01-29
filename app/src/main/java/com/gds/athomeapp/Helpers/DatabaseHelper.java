@@ -77,6 +77,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return locations;
     }
 
+    @SuppressLint("Range")
+    public Location getLastLocation() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Location location = null;
+        Cursor cursor = db.query(TABLE_LOCATIONS, new String[]{COLUMN_LATITUDE, COLUMN_LONGITUDE}, null, null, null, null, COLUMN_ID + " DESC", "1");
+        if (cursor.moveToFirst()) {
+            location = new Location("");
+            location.setLatitude(cursor.getDouble(cursor.getColumnIndex(COLUMN_LATITUDE)));
+            location.setLongitude(cursor.getDouble(cursor.getColumnIndex(COLUMN_LONGITUDE)));
+        }
+        cursor.close();
+        return location;
+    }
+
+
     public void updateLocation(int id, double newLatitude, double newLongitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

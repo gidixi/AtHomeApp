@@ -129,12 +129,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         TextView tvLastLocation = findViewById(R.id.tv_last_location);
         if (lastLocation != null) {
             String text = "Ultima Posizione:\nLatitudine: " + lastLocation.getLatitude() +
-                    "\nLongitudine: " + lastLocation.getLongitude();
-                    tvLastLocation.setText(text);
+                    "\nLongitudine: " + lastLocation.getLongitude() +
+                    // Aggiungiamo la visualizzazione del timestamp
+                    "\nData e Ora: " + lastLocation.getExtras().getString("TIMESTAMP");
+            tvLastLocation.setText(text);
         } else {
             tvLastLocation.setText("Ultima Posizione: nessuna");
         }
     }
+
 
 
 //    private void checkLocationUpdates() {
